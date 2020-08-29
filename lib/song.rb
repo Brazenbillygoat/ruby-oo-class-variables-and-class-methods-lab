@@ -3,14 +3,20 @@ require 'pry'
 class Song
 
   @@song_array = []
+  @@count = 0
+  @@artists = []
+  @@genres = []
 
-  attr_reader :artist, :genre
+  attr_reader :name, :artist, :genre
 
   def initialize(name, artist, genre)
     @name = name
     @artist = artist
     @genre = genre
     @@song_array.push(self)
+    @@count += 1
+    @@artists.push(self.artist)
+    @@genres.push(self.genre)
   end
 
   def self.count
@@ -25,11 +31,38 @@ class Song
     @@song_array.map { |genre| genre.genre }
   end
 
-  def self.genre_count
-
+  def self.count
+    @@count
   end
 
+  def self.artists
+    @@artists.uniq
+  end
+
+  def self.genres
+    @@genres.uniq
+  end
+
+  def self.genre_count
+    genre_count = {}
+    @@genres.each do |genre|
+      if genre_count[genre]
+        genre_count[genre] += 1
+      else
+        genre_count[genre] = 1
+      end
+    end
+    genre_count
+  end
+
+  def self.artist_count
+    artist_count = {}
+    @@artists.each do |artist|
+      artist_count[artist] ? artist_count[artist] += 1 : artist_count[artist] = 1
+    end
+    artist_count
+  end
 end
 
 beautiful = Song.new("great", "Grand", "Wonderful")
-binding.pry
+Song.genre_count
